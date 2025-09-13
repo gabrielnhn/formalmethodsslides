@@ -59,7 +59,10 @@ fig, ax = plt.subplots(figsize=(10, 8))
 plt.subplots_adjust(left=0.1, bottom=0.25)
 ax.set_title('Sigmoid Function with Two Linear Bounds (Conditional Logic)')
 ax.grid(True)
+
 ax.set_ylim([-0.2, 1.2])
+ax.set_xlim([-5, 5])
+
 
 # Choose activation function to plot
 activation_func = sigmoid
@@ -90,21 +93,24 @@ ax.fill_between(x_approx, lower_y, upper_y, color='orange', alpha=0.3, label='Co
 ax.axvline(l_init, color='k', linestyle=':', label='Input Range [l, u]')
 ax.axvline(u_init, color='k', linestyle=':')
 ax.fill_between(x_approx, -0.2, 1.2, color='gray', alpha=0.1, label='Input Interval')
-ax.legend()
+ax.legend(loc="upper left")
 
 # Create sliders for l and u
-ax_l = plt.axes([0.1, 0.1, 0.8, 0.03], facecolor='lightgoldenrodyellow')
-ax_u = plt.axes([0.1, 0.05, 0.8, 0.03], facecolor='lightgoldenrodyellow')
-s_l = Slider(ax_l, 'Lower Bound (l)', -10, 10, valinit=l_init)
-s_u = Slider(ax_u, 'Upper Bound (u)', -10, 10, valinit=u_init)
+# ax_l = plt.axes([0.1, 0.1, 0.8, 0.03], facecolor='lightgoldenrodyellow')
+# ax_u = plt.axes([0.1, 0.05, 0.8, 0.03], facecolor='lightgoldenrodyellow')
+# s_l = Slider(ax_l, 'Lower Bound (l)', -10, 10, valinit=l_init)
+# s_u = Slider(ax_u, 'Upper Bound (u)', -10, 10, valinit=u_init)
+
+l = 4
+u = 4
 
 def update(val):
-    l = s_l.val
-    u = s_u.val
+    # l = s_l.val
+    # u = s_u.val
     
-    if u <= l:
-        s_u.set_val(l + 0.1)
-        u = s_u.val
+    # if u <= l:
+    #     s_u.set_val(l + 0.1)
+    #     u = s_u.val
     
     ax.clear()
     ax.set_title('Sigmoid Function with Two Linear Bounds (Conditional Logic)')
@@ -132,7 +138,9 @@ def update(val):
     ax.legend()
     fig.canvas.draw_idle()
     
-s_l.on_changed(update)
-s_u.on_changed(update)
+# s_l.on_changed(update)
+# s_u.on_changed(update)
+
+plt.tight_layout()
 
 plt.show()
