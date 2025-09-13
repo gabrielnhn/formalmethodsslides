@@ -30,6 +30,44 @@ def get_linear_approx_params(l, u):
     
     return lambda_upper_conn, mu_upper_conn, lambda_lower_prime, mu_lower_prime, lambda_upper_tangent, mu_upper_tangent
 
+def get_paper_params(l, u, activation_function):
+    g = activation_function
+    if g == sigmoid:
+        g_prime = sigmoid_prime
+    elif g == tanh:
+        g_prime = tanh_prime
+    else:
+        raise ValueError("Unsupported activation function")
+
+    g_l = g(l)
+    g_u = g(u)
+    
+    # Paper's definitions for lambda and lambda'
+    lambda_conn = (g_u - g_l) / (u - l) if (u - l) != 0 else 0
+    lambda_prime = min(g_prime(l), g_prime(u))
+    
+    # Conditional rules for the lower bound a_i'<= (x)
+    if l >= 0:
+        lambda_lower = lambda_conn
+    else:
+        lambda_lower = lambda_prime
+    
+    mu_lower = g_l - lambda_lower * l
+        
+    # Conditional rules for the upper bound a_i'>= (x)
+    if u <= 0:
+        lambda_upper = lambda_conn
+    else:
+        lambda_upper = lambda_prime
+    
+    mu_upper = g_u - lambda_upper * u
+    
+    x_approx = np.linspace(l, u, 100)
+    lower_bound_y_values = lambda_lower * x_approx + mu_lower
+    upper_bound_y_values = lambda_upper * x_approx + mu_upper
+    
+    return lower_bound_y_values, upper_bound_y_values
+
 # Create the plot
 fig, ax = plt.subplots(figsize=(10, 8))
 plt.subplots_adjust(left=0.1, bottom=0.25)
@@ -54,14 +92,20 @@ line, = ax.plot(x, y, 'b-', label='Sigmoid Function')
 # Get initial approximation parameters
 lambda_uc, mu_uc, lambda_lp, mu_lp, lambda_ut, mu_ut = get_linear_approx_params(l_init, u_init)
 
+upperb, lowerb = get_paper_params(l_init, u_init, activation_function=sigmoid)
+
+
 # Plot the linear bounds
 x_approx = np.linspace(l_init, u_init, 100)
 # line_upper_conn, = ax.plot(x_approx, lambda_uc * x_approx + mu_uc, 'r--', label='Linear Approx')
-line_upper_conn, = ax.plot(x_approx[:len(x_approx)//2], lambda_uc * x_approx[:len(x_approx)//2] + mu_uc, 'r--', label='Linear (x<0)')
 
-line_upper_tangent, = ax.plot(x_approx[len(x_approx)//2:], lambda_ut * x_approx[len(x_approx)//2:] + mu_ut, 'm--', label='Derivative (x=0)')
+# line_upper_conn, = ax.plot(x_approx[:len(x_approx)//2], lambda_uc * x_approx[:len(x_approx)//2] + mu_uc, 'r--', label='Linear (x<0)')
+# line_upper_tangent, = ax.plot(x_approx[len(x_approx)//2:], lambda_ut * x_approx[len(x_approx)//2:] + mu_ut, 'm--', label='Derivative (x=0)')
+# line_lower_prime, = ax.plot(x_approx, [0]*len(x_approx), 'g--', label='Lower Bound (Zero)')
 
-line_lower_prime, = ax.plot(x_approx, [0]*len(x_approx), 'g--', label='Lower Bound (Zero)')
+# line_upper_conn, = ax.plot(x_approx, lambda_lp * x_approx + mu_lp, 'r--', label='Derivative(x=lower)')
+line_upper_conn, = ax.plot(x_approx, upperb, 'g--', label='Derivative(x=lower)')
+line_lower, = ax.plot(x_approx, lowerb, 'r--', label='Derivative(x=upper)')
 
 # line_lower_prime, = ax.plot(x_approx, lambda_lp * x_approx + mu_lp, 'g--', label='Lower Bound (Min Slope Tangent)')
 
