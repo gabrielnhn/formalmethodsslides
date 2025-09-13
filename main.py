@@ -34,7 +34,8 @@ def get_linear_approx_params(l, u):
 fig, ax = plt.subplots(figsize=(10, 8))
 plt.subplots_adjust(left=0.1, bottom=0.25)
 # ax.set_title('Sigmoid + Linear + Derivative')
-ax.set_title('Sigmoid + Linear')
+ax.set_title('Sigmoid + Linear + Derivative(x=0)')
+# ax.set_title('Sigmoid')
 ax.grid(True)
 ax.set_ylim([-0.2, 1.2])
 ax.set_xlim([-5, 5])
@@ -55,10 +56,10 @@ lambda_uc, mu_uc, lambda_lp, mu_lp, lambda_ut, mu_ut = get_linear_approx_params(
 
 # Plot the linear bounds
 x_approx = np.linspace(l_init, u_init, 100)
-line_upper_conn, = ax.plot(x_approx, lambda_uc * x_approx + mu_uc, 'r--', label='Linear Approx')
-# line_upper_conn, = ax.plot(x_approx[:len(x_approx)//2], lambda_uc * x_approx[:len(x_approx)//2] + mu_uc, 'r--', label='Linear Approx')
+# line_upper_conn, = ax.plot(x_approx, lambda_uc * x_approx + mu_uc, 'r--', label='Linear Approx')
+line_upper_conn, = ax.plot(x_approx[:len(x_approx)//2], lambda_uc * x_approx[:len(x_approx)//2] + mu_uc, 'r--', label='Linear (x<0)')
 
-# line_upper_tangent, = ax.plot(x_approx[len(x_approx)//2:], lambda_ut * x_approx[len(x_approx)//2:] + mu_ut, 'm--', label='Derivative (x=0)')
+line_upper_tangent, = ax.plot(x_approx[len(x_approx)//2:], lambda_ut * x_approx[len(x_approx)//2:] + mu_ut, 'm--', label='Derivative (x=0)')
 
 line_lower_prime, = ax.plot(x_approx, [0]*len(x_approx), 'g--', label='Lower Bound (Zero)')
 
@@ -108,5 +109,5 @@ def update(val):
 
 # s_l.on_changed(update)
 # s_u.on_changed(update)
-
+plt.tight_layout()
 plt.show()
