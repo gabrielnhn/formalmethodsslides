@@ -8,7 +8,7 @@ def activation_func(x):
 # Create the plot
 fig, ax = plt.subplots(figsize=(10, 8))
 plt.subplots_adjust(left=0.1, bottom=0.25)
-ax.set_title('ReLU (x < 0)')
+ax.set_title('ReLU (general case)')
 ax.grid(True)
 
 # ax.set_ylim([-1, 5])
@@ -36,21 +36,23 @@ x_approx = np.linspace(l_init, u_init, 100)
 # ax.plot(x_approx, activation_func(x_approx), 'r', label='Linear Lower=Upper Bound')
 # ax.plot(x_approx, lower_y, 'g--', label='Linear Lower Bound')
 
-# # Plot the convex hull by filling the area between the lines
-# ax.fill_between(x_approx, lower_y, upper_y, color='orange', alpha=0.3, label='Convex Hull')
+
+up_from_zero = u*(x_approx-l)/(u-l)
 
 zero_base, = ax.plot(x_approx, [0]*len(x_approx), 'g--', label='Lower Bound (Zero)')
-zero_upper, = ax.plot(x_approx, u*(x_approx-l)/(u-l), 'r--', label='Upper Bound (From Zero)')
-linear, = ax.plot(x_approx, x_approx, 'r--', label='Upper Bound (From Zero)')
+zero_upper, = ax.plot(x_approx, up_from_zero, 'r--', label='Upper Bound (From Zero)')
+linear, = ax.plot(x_approx, x_approx, 'r--', label='Linear Bound')
 
-
+# # Plot the convex hull by filling the area between the lines
+ax.fill_between(x_approx, x_approx, up_from_zero, color='red', alpha=0.3, label='Lambda=1')
+ax.fill_between(x_approx, [0]*len(x_approx), up_from_zero, color='blue', alpha=0.3, label='Lambda=0')
 
 
 # Plot the input interval on the x-axis
 ax.axvline(l_init, color='k', linestyle=':', label='Input Range [l, u]')
 ax.axvline(u_init, color='k', linestyle=':')
 # ax.fill_between(x_approx, ax.get_ylim()[0], ax.get_ylim()[1], color='gray', alpha=0.5, label='Input Interval')
-ax.fill_between(x_approx, -0.1, 4.1, color='gray', alpha=0.25, label='Input Interval')
+# ax.fill_between(x_approx, -0.1, 4.1, color='gray', alpha=0.25, label='Input Interval')
 # ax.fill_between(x_approx, -0.1, +0.1, color='gray', alpha=0.5, label='Input Interval')
 ax.legend(loc="upper left")
 
