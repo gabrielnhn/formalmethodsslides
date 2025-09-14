@@ -57,7 +57,7 @@ def get_paper_params(l, u, activation_function):
 # Create the plot
 fig, ax = plt.subplots(figsize=(10, 8))
 plt.subplots_adjust(left=0.1, bottom=0.25)
-ax.set_title('Sigmoid Function with Two Linear Bounds (Conditional Logic)')
+ax.set_title('Lower > 0 and Upper > 0')
 ax.grid(True)
 
 ax.set_ylim([-0.2, 1.2])
@@ -68,8 +68,10 @@ ax.set_xlim([-5, 5])
 activation_func = sigmoid
 
 # Initial values for the input range
-l_init = -4.0
-u_init = 4.0
+l_init = +0.1
+u_init = 4
+l = l_init
+u = u_init
 
 # Generate x-axis data for the activation function
 x = np.linspace(-10, 10, 400)
@@ -101,8 +103,7 @@ ax.legend(loc="upper left")
 # s_l = Slider(ax_l, 'Lower Bound (l)', -10, 10, valinit=l_init)
 # s_u = Slider(ax_u, 'Upper Bound (u)', -10, 10, valinit=u_init)
 
-l = 4
-u = 4
+
 
 def update(val):
     # l = s_l.val

@@ -72,7 +72,7 @@ def get_paper_params(l, u, activation_function):
 fig, ax = plt.subplots(figsize=(10, 8))
 plt.subplots_adjust(left=0.1, bottom=0.25)
 # ax.set_title('Sigmoid + Linear + Derivative')
-ax.set_title('Sigmoid + Linear + Derivative(x=0)')
+ax.set_title('Sigmoid + Derivatives(x=l,u)')
 # ax.set_title('Sigmoid')
 ax.grid(True)
 ax.set_ylim([-0.2, 1.2])
